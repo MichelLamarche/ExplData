@@ -1,0 +1,21 @@
+##set working directory and load libraries
+setwd("C:/Users/Michel/Documents/R")
+
+options(stringsAsFactors = FALSE)
+library(data.table)
+library(datasets)
+##load data
+data<-read.table("C:/Users/Michel/Documents/R/household_power_consumption.txt",sep =";", header = TRUE)
+data$Date <- as.Date( as.character(data$Date), format= "%d/%m/%Y")
+dataGood<- subset (data, Date >= as.Date("2007-02-01")  & Date <= as.Date("2007-02-02"))
+rm(data)
+dataGood[,4]<-as.numeric(dataGood[, 4])
+dataGood[,5]<-as.numeric(dataGood[, 5])
+dataGood[,6]<-as.numeric(dataGood[, 6])
+y<-as.numeric(dataGood$Global_active_power) 
+x<-as.factor(weekdays(dataGood$Date))
+plot.new() 
+plot(y,ylab="Global active power (kilowatts)",xaxt="n",type="l") 
+axis(1,at=1:2880, labels=x)
+dev.copy(png, file="Plot2.png", width = 480, height = 480)
+dev.off()
